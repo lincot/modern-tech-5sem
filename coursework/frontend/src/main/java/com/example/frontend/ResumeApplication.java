@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opencsv.CSVWriter;
 import com.example.common.*;
+import javafx.application.HostServices;
 import javafx.scene.control.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -32,19 +33,6 @@ import org.springframework.web.util.UriComponentsBuilder;
  * Главный класс приложения. Запускает JavaFX интерфейс пользователя.
  */
 public class ResumeApplication extends Application {
-    private static final String BASE_URL = "http://localhost:8080/api/resumes";
-    private static final String BASE_URL_SAMPLE = "http://localhost:8080/api/resumes_sample";
-    private final TextField inputFileField = new TextField("resumes.json");
-    private final TextField deleteResumeField = new TextField();
-    private final TextField sampleSizeField = new TextField();
-    private final Text sampleSizeErrorText = new Text();
-    private final TextField ratingField = new TextField();
-    private final TextField ageLowerBoundField = new TextField();
-    private final TextField ageUpperBoundField = new TextField();
-    private final TextField cityField = new TextField();
-    private final TextField outputFileField = new TextField("output.csv");
-    private final Text getSampleErrorText = new Text();
-
     /**
      * Точка входа в приложение.
      *
@@ -58,7 +46,7 @@ public class ResumeApplication extends Application {
      * Конструктор класса
      */
     public ResumeApplication() {
-        sampleSizeErrorText.setFill(Color.RED);
+
     }
 
     /**
@@ -69,6 +57,18 @@ public class ResumeApplication extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Резюме");
 
+        TextField inputFileField = new TextField("resumes.json");
+        TextField deleteResumeField = new TextField();
+        TextField sampleSizeField = new TextField();
+        Text sampleSizeErrorText = new Text();
+        sampleSizeErrorText.setFill(Color.RED);
+        TextField ratingField = new TextField();
+        TextField ageLowerBoundField = new TextField();
+        TextField ageUpperBoundField = new TextField();
+        TextField cityField = new TextField();
+        TextField outputFileField = new TextField("output.csv");
+        Text getSampleErrorText = new Text();
+
         Button uploadResumesButton = new Button("загрузить список резюме из файла:");
         Button showResumesButton = new Button("показать список резюме");
         Button deleteResumeButton = new Button("удалить резюме по идентификатору:");
@@ -78,23 +78,23 @@ public class ResumeApplication extends Application {
         uploadResumesButton.setOnAction(_e -> {
             ArrayList<Resume> resumes;
             try {
-                resumes = parseResumes(inputFileField.getText());
+                resumes = ResumeFileHandler.parseResumes(inputFileField.getText());
             } catch (Exception e) {
-                showErrorPopup("ошибка при чтении файла", e.toString());
+                PopupHandler.showErrorPopup("ошибка при чтении файла", e.toString());
                 return;
             }
             try {
-                postResumes(resumes);
+                ResumeService.postResumes(resumes);
             } catch (Exception e) {
-                showErrorPopup("ошибка при обращении к серверу", e.toString());
+                PopupHandler.showErrorPopup("ошибка при обращении к серверу", e.toString());
             }
         });
         showResumesButton.setOnAction(_e -> {
             ArrayList<Resume> resumes;
             try {
-                resumes = getResumes();
+                resumes = ResumeService.getResumes();
             } catch (Exception e) {
-                showErrorPopup("ошибка при обращении к серверу", e.toString());
+                PopupHandler.showErrorPopup("ошибка при обращении к серверу", e.toString());
                 return;
             }
             ResumesFrame resumesFrame = new ResumesFrame(resumes);
@@ -102,9 +102,9 @@ public class ResumeApplication extends Application {
         });
         deleteResumeButton.setOnAction(_e -> {
             try {
-                deleteResume(deleteResumeField.getText());
+                ResumeService.deleteResume(deleteResumeField.getText());
             } catch (Exception e) {
-                showErrorPopup("ошибка при обращении к серверу", e.toString());
+                PopupHandler.showErrorPopup("ошибка при обращении к серверу", e.toString());
             }
         });
         getResumeSampleButton.setOnAction(_e -> {
@@ -124,15 +124,9 @@ public class ResumeApplication extends Application {
             }
             ArrayList<Resume> resumes;
             try {
-                resumes = getResumeSample(
-                        sampleSizeField.getText(),
-                        ratingField.getText(),
-                        ageLowerBoundField.getText(),
-                        ageUpperBoundField.getText(),
-                        cityField.getText()
-                );
+                resumes = ResumeService.getResumeSample(sampleSizeField.getText(), ratingField.getText(), ageLowerBoundField.getText(), ageUpperBoundField.getText(), cityField.getText());
             } catch (Exception e) {
-                showErrorPopup("ошибка при обращении к серверу", e.toString());
+                PopupHandler.showErrorPopup("ошибка при обращении к серверу", e.toString());
                 return;
             }
             if (resumes.isEmpty()) {
@@ -145,13 +139,13 @@ public class ResumeApplication extends Application {
                 getSampleErrorText.setFill(Color.GREEN);
                 getSampleErrorText.setText("данные успешно записаны");
                 try {
-                    writeResumesToCsv(resumes, outputFileField.getText());
+                    ResumeFileHandler.writeResumesToCsv(resumes, outputFileField.getText());
                 } catch (Exception e) {
-                    showErrorPopup("ошибка при записи в файл", e.toString());
+                    PopupHandler.showErrorPopup("ошибка при записи в файл", e.toString());
                 }
             }
         });
-        aboutButton.setOnAction(_e -> showAboutAuthorPopup());
+        aboutButton.setOnAction(_e -> PopupHandler.showAboutAuthorPopup(getHostServices()));
 
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(10, 10, 10, 10));
@@ -194,34 +188,29 @@ public class ResumeApplication extends Application {
 
         GridPane.setConstraints(aboutButton, 0, 11);
 
-        grid.getChildren().addAll(
-                inputFileField,
-                uploadResumesButton,
-                showResumesButton,
-                deleteResumeButton,
-                deleteResumeField,
-                separator,
-                sampleSizeText,
-                sampleSizeField,
-                sampleSizeErrorText,
-                ratingText,
-                ratingField,
-                ageLowerBoundText,
-                ageLowerBoundField,
-                ageUpperBoundText,
-                ageUpperBoundField,
-                cityText,
-                cityField,
-                getResumeSampleButton,
-                outputFileField,
-                getSampleErrorText,
-                aboutButton
-        );
+        grid.getChildren().addAll(inputFileField, uploadResumesButton, showResumesButton, deleteResumeButton, deleteResumeField, separator, sampleSizeText, sampleSizeField, sampleSizeErrorText, ratingText, ratingField, ageLowerBoundText, ageLowerBoundField, ageUpperBoundText, ageUpperBoundField, cityText, cityField, getResumeSampleButton, outputFileField, getSampleErrorText, aboutButton);
 
         Scene scene = new Scene(grid);
         scene.getStylesheets().add("style.css");
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+}
+
+/**
+ * Класс, отвечающий за коммуникацию с сервером.
+ */
+class ResumeService {
+    private static final String BASE_URL = "http://localhost:8080/api/resumes";
+    private static final String BASE_URL_SAMPLE = "http://localhost:8080/api/resumes_sample";
+
+    /**
+     * Отправляет резюме из списка на сервер.
+     *
+     * @param resumes Список резюме для отправления
+     */
+    public static void postResumes(ArrayList<Resume> resumes) {
+        new RestTemplate().postForLocation(BASE_URL, resumes);
     }
 
     /**
@@ -229,24 +218,12 @@ public class ResumeApplication extends Application {
      *
      * @param id Идентификатор резюме для удаления
      */
-    private void deleteResume(String id) {
+    public static void deleteResume(String id) {
         try {
-            new RestTemplate().delete(UriComponentsBuilder.fromHttpUrl(BASE_URL)
-                    .queryParam("id", id)
-                    .toUriString()
-            );
+            new RestTemplate().delete(UriComponentsBuilder.fromHttpUrl(BASE_URL).queryParam("id", id).toUriString());
         } catch (Exception e) {
-            showErrorPopup("ошибка при обращении к серверу", e.toString());
+            PopupHandler.showErrorPopup("ошибка при обращении к серверу", e.toString());
         }
-    }
-
-    /**
-     * Отправляет резюме из списка на сервер.
-     *
-     * @param resumes Список резюме для отправления
-     */
-    private static void postResumes(ArrayList<Resume> resumes) {
-        new RestTemplate().postForLocation(BASE_URL, resumes);
     }
 
     /**
@@ -254,14 +231,9 @@ public class ResumeApplication extends Application {
      *
      * @return Список всех резюме на сервере
      */
-    private ArrayList<Resume> getResumes() {
-        ResponseEntity<ArrayList<Resume>> response = new RestTemplate().exchange(
-                BASE_URL,
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<>() {
-                }
-        );
+    public static ArrayList<Resume> getResumes() {
+        ResponseEntity<ArrayList<Resume>> response = new RestTemplate().exchange(BASE_URL, HttpMethod.GET, null, new ParameterizedTypeReference<>() {
+        });
         return response.getBody();
     }
 
@@ -276,191 +248,25 @@ public class ResumeApplication extends Application {
      * @param city   Город (необязательно)
      * @return Список резюме, соответствующих заданным параметрам
      */
-    private static ArrayList<Resume> getResumeSample(String n, String rating, String minAge, String maxAge, String city) {
-        String url = UriComponentsBuilder.fromHttpUrl(BASE_URL_SAMPLE)
-                .queryParam("n", n)
-                .queryParam("rating", rating)
-                .queryParam("minAge", minAge)
-                .queryParam("maxAge", maxAge)
-                .queryParam("city", city)
-                .toUriString();
-        ResponseEntity<ArrayList<Resume>> response = new RestTemplate().exchange(
-                url,
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<>() {
-                }
-        );
+    public static ArrayList<Resume> getResumeSample(String n, String rating, String minAge, String maxAge, String city) {
+        String url = UriComponentsBuilder.fromHttpUrl(BASE_URL_SAMPLE).queryParam("n", n).queryParam("rating", rating).queryParam("minAge", minAge).queryParam("maxAge", maxAge).queryParam("city", city).toUriString();
+        ResponseEntity<ArrayList<Resume>> response = new RestTemplate().exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<>() {
+        });
         return response.getBody();
     }
+}
 
-    /**
-     * Получает список резюме из файла.
-     *
-     * @param pathname Путь к файлу со списком резюме в формате json
-     * @return Список прочитанных резюме
-     * @throws IOException Если произошла ошибка ввода-вывода
-     */
-    private static ArrayList<Resume> parseResumes(String pathname) throws IOException {
-        ArrayList<Resume> resumes = new ArrayList<>();
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        JsonNode jsonNode = objectMapper.readTree(new File(pathname));
-
-        Iterator<JsonNode> iterator = jsonNode.elements();
-        while (iterator.hasNext()) {
-            JsonNode resumeNode = iterator.next().get("resume");
-            Resume resume = new ObjectMapper().treeToValue(resumeNode, Resume.class);
-            resumes.add(resume);
-        }
-
-        return resumes;
-    }
-
-    /**
-     * Записывает список резюме в файл.
-     *
-     * @param resumes  Список резюме
-     * @param pathname Путь к файлу для записи
-     * @throws IOException Если произошла ошибка ввода-вывода
-     */
-    public void writeResumesToCsv(ArrayList<Resume> resumes, String pathname) throws IOException {
-        CSVWriter writer = new CSVWriter(new FileWriter(pathname), ';', '\0', '\\', "\n");
-        String[] header = {
-                "rating", "age", "area", "sites_count", "metro", "metro_line",
-                "owner_id", "comments_count", "title", "gender",
-                "salary_currency", "salary_amount", "skills", "languages", "schedules",
-                "education_level", "education_additional", "education_attestation",
-                "education_elementary", "education_primary", "skill_set", "birth_date",
-                "created_at", "employments", "experience", "first_name", "middle_name",
-                "last_name", "relocation_type", "relocation_area", "relocation_district",
-                "updated_at", "certificates", "citizenship", "work_ticket",
-                "has_vehicle", "travel_time", "resume_locale", "professional_roles",
-                "recommendations", "specializations", "total_experience_months",
-                "driver_license_types", "business_trip_readiness"
-        };
-        writer.writeNext(header);
-
-        for (Resume resume : resumes) {
-            String[] data = {
-                    String.valueOf(resume.rating),
-                    String.valueOf(resume.age),
-                    resume.area == null ? "null" : resume.area.name,
-                    resume.site == null ? "null" : String.valueOf(resume.site.size()),
-                    resume.metro == null ? "null" : resume.metro.name,
-                    resume.metro == null ? "null" : resume.metro.line.name,
-                    resume.owner.id,
-                    String.valueOf(resume.owner.comments.counters.total),
-                    resume.title,
-                    resume.gender == null ? "null" : resume.gender.name,
-                    resume.salary == null ? "null" : resume.salary.currency,
-                    resume.salary == null ? "null" : String.valueOf(resume.salary.amount),
-                    resume.skills == null ? "null" : resume.skills,
-                    "[" + resume.language.stream()
-                            .map(language -> "(\"" + language.name + "\", \"" + language.level.name + "\")")
-                            .collect(Collectors.joining(", ")) + "]",
-                    "[" + resume.schedules.stream()
-                            .map(schedule -> "\"" + schedule.name + "\"")
-                            .collect(Collectors.joining(", ")) + "]",
-                    resume.education.level.name,
-                    resume.education.additional == null ? "null" : ("[" + resume.education.additional.stream()
-                            .map(additional -> "(\"" + additional.name + "\", \""
-                                    + additional.organization + "\", \""
-                                    + additional.result + "\", "
-                                    + additional.year + ")")
-                            .collect(Collectors.joining(", ")) + "]"),
-                    resume.education.attestation == null ? "null" : ("[" + resume.education.attestation.stream()
-                            .map(attestation -> "(\"" + attestation.name + "\", \""
-                                    + attestation.organization + "\", \""
-                                    + attestation.result + "\", "
-                                    + attestation.year + ")")
-                            .collect(Collectors.joining(", ")) + "]"),
-                    resume.education.elementary == null ? "null" : ("[" + resume.education.elementary.stream()
-                            .map(elementary -> "(\"" + elementary.name + "\", "
-                                    + elementary.year + ")")
-                            .collect(Collectors.joining(", ")) + "]"),
-                    resume.education.primary == null ? "null" : ("[" + resume.education.primary.stream()
-                            .map(primary -> "(\"" + primary.name + "\", \""
-                                    + primary.organization + "\", \""
-                                    + primary.result + "\", "
-                                    + primary.year + ")")
-                            .collect(Collectors.joining(", ")) + "]"),
-                    "[" + resume.skill_set.stream()
-                            .map(skill -> "\"" + skill + "\"")
-                            .collect(Collectors.joining(", ")) + "]",
-                    resume.birth_date,
-                    resume.created_at,
-                    "[" + resume.employments.stream()
-                            .map(employment -> "\"" + employment.name + "\"")
-                            .collect(Collectors.joining(", ")) + "]",
-                    "[" + resume.experience.stream()
-                            .map(experience -> "(\""
-                                    + (experience.area == null ? "null" : experience.area.name) + "\", \""
-                                    + experience.company + "\", \""
-                                    + experience.position + "\", \""
-                                    + experience.start + "\", \""
-                                    + experience.end + "\", ["
-                                    + experience.industries.stream().map(industry -> "\"" + industry.name + "\"")
-                                    .collect(Collectors.joining(", ")) + "]"
-                                    + "\")")
-                            .collect(Collectors.joining(", ")) + "]",
-                    resume.first_name,
-                    resume.middle_name,
-                    resume.last_name,
-                    resume.relocation.type.name,
-                    resume.relocation.area == null ? "null" : ("[" + resume.relocation.area.stream()
-                            .map(area -> "\"" + area.name + "\"")
-                            .collect(Collectors.joining(", ")) + "]"),
-                    resume.relocation.district == null ? "null" : ("[" + resume.relocation.district.stream()
-                            .map(district -> "\"" + district.name + "\"")
-                            .collect(Collectors.joining(", ")) + "]"),
-                    resume.updated_at,
-                    "[" + resume.certificate.stream()
-                            .map(certificate -> "(\"" + certificate.type + "\", \"" + certificate.title + "\", \"" + certificate.achieved_at + "\")")
-                            .collect(Collectors.joining(", ")) + "]",
-                    "[" + resume.citizenship.stream()
-                            .map(country -> "\"" + country.name + "\"")
-                            .collect(Collectors.joining(", ")) + "]",
-                    "[" + resume.work_ticket.stream()
-                            .map(country -> "\"" + country.name + "\"")
-                            .collect(Collectors.joining(", ")) + "]",
-                    String.valueOf(resume.has_vehicle),
-                    resume.travel_time.name,
-                    resume.resume_locale.name,
-                    resume.professional_roles == null ? "null" : ("[" + resume.professional_roles.stream()
-                            .map(professionalRole -> "\"" + professionalRole.name + "\"")
-                            .collect(Collectors.joining(", ")) + "]"),
-                    "[" + resume.recommendation.stream()
-                            .map(recommendation -> "(\"" + recommendation.organization + "\", \"" + recommendation.position + "\")")
-                            .collect(Collectors.joining(", ")) + "]",
-                    resume.specialization == null ? "null" : ("[" + resume.specialization.stream()
-                            .map(specialization -> "(\"" + specialization.name + "\", \""
-                                    + specialization.profarea_name + "\", \""
-                                    + specialization.laboring + "\")")
-                            .collect(Collectors.joining(", ")) + "]"),
-                    resume.total_experience == null ? "null" : String.valueOf(resume.total_experience.months),
-                    "[" + resume.driver_license_types.stream()
-                            .map(driver_license_type -> "\"" + driver_license_type.id + "\"")
-                            .collect(Collectors.joining(", ")) + "]",
-                    resume.business_trip_readiness.name,
-            };
-            for (int i = 0; i < data.length; i++) {
-                if (data[i] != null) {
-                    data[i] = data[i].replace(';', ',').replace('\n', ' ');
-                }
-            }
-            writer.writeNext(data);
-        }
-        writer.close();
-    }
-
+/**
+ * Класс, отвечающий за отображение всплывающих окон.
+ */
+class PopupHandler {
     /**
      * Отображает всплывающее окно с ошибкой.
      *
      * @param header  Оглавление ошибки
      * @param content Описание ошибки
      */
-    private void showErrorPopup(String header, String content) {
+    public static void showErrorPopup(String header, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.getDialogPane().getStylesheets().add("style.css");
         alert.setTitle("произошла ошибка");
@@ -472,8 +278,10 @@ public class ResumeApplication extends Application {
 
     /**
      * Отображает всплывающее окно с информацией об авторе.
+     *
+     * @param hostServices Хост-сервисы приложения
      */
-    private void showAboutAuthorPopup() {
+    public static void showAboutAuthorPopup(HostServices hostServices) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.getDialogPane().getStylesheets().add("style.css");
         alert.setTitle("об авторе");
@@ -485,7 +293,7 @@ public class ResumeApplication extends Application {
         String link = "github.com/lincot";
         Hyperlink websiteLink = new Hyperlink(link);
 
-        websiteLink.setOnAction(_e -> getHostServices().showDocument("https://" + link));
+        websiteLink.setOnAction(_e -> hostServices.showDocument("https://" + link));
 
         textFlow.getChildren().addAll(text, websiteLink);
         alert.getDialogPane().setContent(textFlow);
@@ -518,5 +326,57 @@ class ResumesFrame extends Stage {
         Scene scene = new Scene(layout);
         scene.getStylesheets().add("style.css");
         setScene(scene);
+    }
+}
+
+/**
+ * Класс чтения резюме из файлов и записи в них.
+ */
+class ResumeFileHandler {
+    /**
+     * Получает список резюме из файла.
+     *
+     * @param pathname Путь к файлу со списком резюме в формате json
+     * @return Список прочитанных резюме
+     * @throws IOException Если произошла ошибка ввода-вывода
+     */
+    public static ArrayList<Resume> parseResumes(String pathname) throws IOException {
+        ArrayList<Resume> resumes = new ArrayList<>();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        JsonNode jsonNode = objectMapper.readTree(new File(pathname));
+
+        Iterator<JsonNode> iterator = jsonNode.elements();
+        while (iterator.hasNext()) {
+            JsonNode resumeNode = iterator.next().get("resume");
+            Resume resume = new ObjectMapper().treeToValue(resumeNode, Resume.class);
+            resumes.add(resume);
+        }
+
+        return resumes;
+    }
+
+    /**
+     * Записывает список резюме в файл.
+     *
+     * @param resumes  Список резюме
+     * @param pathname Путь к файлу для записи
+     * @throws IOException Если произошла ошибка ввода-вывода
+     */
+    public static void writeResumesToCsv(ArrayList<Resume> resumes, String pathname) throws IOException {
+        CSVWriter writer = new CSVWriter(new FileWriter(pathname), ';', '\0', '\\', "\n");
+        String[] header = {"rating", "age", "area", "sites_count", "metro", "metro_line", "owner_id", "comments_count", "title", "gender", "salary_currency", "salary_amount", "skills", "languages", "schedules", "education_level", "education_additional", "education_attestation", "education_elementary", "education_primary", "skill_set", "birth_date", "created_at", "employments", "experience", "first_name", "middle_name", "last_name", "relocation_type", "relocation_area", "relocation_district", "updated_at", "certificates", "citizenship", "work_ticket", "has_vehicle", "travel_time", "resume_locale", "professional_roles", "recommendations", "specializations", "total_experience_months", "driver_license_types", "business_trip_readiness"};
+        writer.writeNext(header);
+
+        for (Resume resume : resumes) {
+            String[] data = {String.valueOf(resume.rating), String.valueOf(resume.age), resume.area == null ? "null" : resume.area.name, resume.site == null ? "null" : String.valueOf(resume.site.size()), resume.metro == null ? "null" : resume.metro.name, resume.metro == null ? "null" : resume.metro.line.name, resume.owner.id, String.valueOf(resume.owner.comments.counters.total), resume.title, resume.gender == null ? "null" : resume.gender.name, resume.salary == null ? "null" : resume.salary.currency, resume.salary == null ? "null" : String.valueOf(resume.salary.amount), resume.skills == null ? "null" : resume.skills, "[" + resume.language.stream().map(language -> "(\"" + language.name + "\", \"" + language.level.name + "\")").collect(Collectors.joining(", ")) + "]", "[" + resume.schedules.stream().map(schedule -> "\"" + schedule.name + "\"").collect(Collectors.joining(", ")) + "]", resume.education.level.name, resume.education.additional == null ? "null" : ("[" + resume.education.additional.stream().map(additional -> "(\"" + additional.name + "\", \"" + additional.organization + "\", \"" + additional.result + "\", " + additional.year + ")").collect(Collectors.joining(", ")) + "]"), resume.education.attestation == null ? "null" : ("[" + resume.education.attestation.stream().map(attestation -> "(\"" + attestation.name + "\", \"" + attestation.organization + "\", \"" + attestation.result + "\", " + attestation.year + ")").collect(Collectors.joining(", ")) + "]"), resume.education.elementary == null ? "null" : ("[" + resume.education.elementary.stream().map(elementary -> "(\"" + elementary.name + "\", " + elementary.year + ")").collect(Collectors.joining(", ")) + "]"), resume.education.primary == null ? "null" : ("[" + resume.education.primary.stream().map(primary -> "(\"" + primary.name + "\", \"" + primary.organization + "\", \"" + primary.result + "\", " + primary.year + ")").collect(Collectors.joining(", ")) + "]"), "[" + resume.skill_set.stream().map(skill -> "\"" + skill + "\"").collect(Collectors.joining(", ")) + "]", resume.birth_date, resume.created_at, "[" + resume.employments.stream().map(employment -> "\"" + employment.name + "\"").collect(Collectors.joining(", ")) + "]", "[" + resume.experience.stream().map(experience -> "(\"" + (experience.area == null ? "null" : experience.area.name) + "\", \"" + experience.company + "\", \"" + experience.position + "\", \"" + experience.start + "\", \"" + experience.end + "\", [" + experience.industries.stream().map(industry -> "\"" + industry.name + "\"").collect(Collectors.joining(", ")) + "]" + "\")").collect(Collectors.joining(", ")) + "]", resume.first_name, resume.middle_name, resume.last_name, resume.relocation.type.name, resume.relocation.area == null ? "null" : ("[" + resume.relocation.area.stream().map(area -> "\"" + area.name + "\"").collect(Collectors.joining(", ")) + "]"), resume.relocation.district == null ? "null" : ("[" + resume.relocation.district.stream().map(district -> "\"" + district.name + "\"").collect(Collectors.joining(", ")) + "]"), resume.updated_at, "[" + resume.certificate.stream().map(certificate -> "(\"" + certificate.type + "\", \"" + certificate.title + "\", \"" + certificate.achieved_at + "\")").collect(Collectors.joining(", ")) + "]", "[" + resume.citizenship.stream().map(country -> "\"" + country.name + "\"").collect(Collectors.joining(", ")) + "]", "[" + resume.work_ticket.stream().map(country -> "\"" + country.name + "\"").collect(Collectors.joining(", ")) + "]", String.valueOf(resume.has_vehicle), resume.travel_time.name, resume.resume_locale.name, resume.professional_roles == null ? "null" : ("[" + resume.professional_roles.stream().map(professionalRole -> "\"" + professionalRole.name + "\"").collect(Collectors.joining(", ")) + "]"), "[" + resume.recommendation.stream().map(recommendation -> "(\"" + recommendation.organization + "\", \"" + recommendation.position + "\")").collect(Collectors.joining(", ")) + "]", resume.specialization == null ? "null" : ("[" + resume.specialization.stream().map(specialization -> "(\"" + specialization.name + "\", \"" + specialization.profarea_name + "\", \"" + specialization.laboring + "\")").collect(Collectors.joining(", ")) + "]"), resume.total_experience == null ? "null" : String.valueOf(resume.total_experience.months), "[" + resume.driver_license_types.stream().map(driver_license_type -> "\"" + driver_license_type.id + "\"").collect(Collectors.joining(", ")) + "]", resume.business_trip_readiness.name,};
+            for (int i = 0; i < data.length; i++) {
+                if (data[i] != null) {
+                    data[i] = data[i].replace(';', ',').replace('\n', ' ');
+                }
+            }
+            writer.writeNext(data);
+        }
+        writer.close();
     }
 }
