@@ -5,6 +5,5 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Platform {
-    @Id
-    public String id;
+  @Id public String id;
 }

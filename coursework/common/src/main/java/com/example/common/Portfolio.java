@@ -6,10 +6,8 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Portfolio {
-    @Id
-    @GeneratedValue
-    private int id;
-    public String description;
-    public String medium;
-    public String small;
+  @Id @GeneratedValue private int id;
+  public String description;
+  public String medium;
+  public String small;
 }

@@ -5,7 +5,6 @@ import jakarta.persistence.Id;
 
 @Entity
 public class HiddenField {
-    @Id
-    public String id;
-    public String name;
+  @Id public String id;
+  public String name;
 }

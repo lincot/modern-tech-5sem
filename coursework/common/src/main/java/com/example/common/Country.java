@@ -5,8 +5,7 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Country {
-    @Id
-    public String id;
-    public String url;
-    public String name;
+  @Id public String id;
+  public String url;
+  public String name;
 }

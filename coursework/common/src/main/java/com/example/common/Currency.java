@@ -6,10 +6,8 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Currency {
-    @Id
-    @GeneratedValue
-    private int id;
-    public String abbr;
-    public String code;
-    public String name;
+  @Id @GeneratedValue private int id;
+  public String abbr;
+  public String code;
+  public String name;
 }
