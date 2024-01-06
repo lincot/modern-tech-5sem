@@ -80,8 +80,8 @@ public class TreeApplication extends Application {
 
         grid.getChildren().addAll(showTreesButton, readFromDBButton, writeToDBButton, deleteNodeButton, deleteNodeField, addChildNodeButton, childNodeField, parentNodeField, addTreeButton, treeField);
 
-        Scene scene = new Scene(grid, 400, 200);
-        scene.getStylesheets().add("https://raw.githubusercontent.com/antoniopelusi/JavaFX-Dark-Theme/main/style.css");
+        Scene scene = new Scene(grid);
+        scene.getStylesheets().add("style.css");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -164,7 +164,7 @@ class TreesFrame extends Stage {
         layout.getChildren().add(infoTextArea);
 
         Scene scene = new Scene(layout);
-        scene.getStylesheets().add("https://raw.githubusercontent.com/antoniopelusi/JavaFX-Dark-Theme/main/style.css");
+        scene.getStylesheets().add("style.css");
         setScene(scene);
     }
 }

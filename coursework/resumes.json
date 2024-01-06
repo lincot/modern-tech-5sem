@@ -1,0 +1,409 @@
+[
+  {
+    "resume": {
+      "id": "246c7f3dff08be14220039ed1f4f575a625039",
+      "age": 21,
+      "area": {
+        "id": "1",
+        "url": "https://api.hh.ru/areas/1",
+        "name": "Москва"
+      },
+      "site": [],
+      "metro": null,
+      "owner": {
+        "id": "73921273",
+        "comments": {
+          "url": "https://api.hh.ru/applicant_comments/73921273",
+          "counters": { "total": 0 }
+        }
+      },
+      "photo": null,
+      "title": "Java Intern",
+      "gender": { "id": "male", "name": "Мужской" },
+      "salary": null,
+      "skills": "Студент 4-го курса. Изучать программирование начинал с языка C, а затем перешёл на java. Прошёл обучение в одной компании, где познакомился, а также применял такие технологии:\n\nSpring Framework, Spring boot, MyBatis\nPostgreSQL\nGit\nMaven\n\nСсылка на \"pet-project\": \nhttps://bitbucket.org/java-intership2020/internship/src/konstantin_privalov/src/\n",
+      "actions": {
+        "download": {
+          "pdf": {
+            "url": "https://api.hh.ru/resumes/246c7f3dff08be14220039ed1f4f575a625039/download/%D0%9F%D1%80%D0%B8%D0%B2%D0%B0%D0%BB%D0%BE%D0%B2%20%D0%9A%D0%BE%D0%BD%D1%81%D1%82%D0%B0%D0%BD%D1%82%D0%B8%D0%BD.pdf?type=pdf"
+          },
+          "rtf": {
+            "url": "https://api.hh.ru/resumes/246c7f3dff08be14220039ed1f4f575a625039/download/%D0%9F%D1%80%D0%B8%D0%B2%D0%B0%D0%BB%D0%BE%D0%B2%20%D0%9A%D0%BE%D0%BD%D1%81%D1%82%D0%B0%D0%BD%D1%82%D0%B8%D0%BD.rtf?type=rtf"
+          }
+        }
+      },
+      "contact": [
+        {
+          "type": { "id": "cell", "name": "Мобильный телефон" },
+          "value": {
+            "city": "910",
+            "number": "2920108",
+            "country": "7",
+            "formatted": "+7 (910) 292-01-08"
+          },
+          "comment": null,
+          "verified": true,
+          "preferred": false
+        },
+        {
+          "type": { "id": "email", "name": "Эл. почта" },
+          "value": "qqstik@gmail.com",
+          "preferred": true
+        }
+      ],
+      "download": {
+        "pdf": {
+          "url": "https://api.hh.ru/resumes/246c7f3dff08be14220039ed1f4f575a625039/download/%D0%9F%D1%80%D0%B8%D0%B2%D0%B0%D0%BB%D0%BE%D0%B2%20%D0%9A%D0%BE%D0%BD%D1%81%D1%82%D0%B0%D0%BD%D1%82%D0%B8%D0%BD.pdf?type=pdf"
+        },
+        "rtf": {
+          "url": "https://api.hh.ru/resumes/246c7f3dff08be14220039ed1f4f575a625039/download/%D0%9F%D1%80%D0%B8%D0%B2%D0%B0%D0%BB%D0%BE%D0%B2%20%D0%9A%D0%BE%D0%BD%D1%81%D1%82%D0%B0%D0%BD%D1%82%D0%B8%D0%BD.rtf?type=rtf"
+        }
+      },
+      "language": [
+        {
+          "id": "rus",
+          "name": "Русский",
+          "level": { "id": "l1", "name": "Родной" }
+        },
+        {
+          "id": "eng",
+          "name": "Английский",
+          "level": { "id": "b2", "name": "B2 — Средне-продвинутый" }
+        }
+      ],
+      "schedule": { "id": "fullDay", "name": "Полный день" },
+      "education": {
+        "level": { "id": "unfinished_higher", "name": "Неоконченное высшее" },
+        "primary": [
+          {
+            "name": "РТУ МИРЭА",
+            "year": 2021,
+            "result": "Прикладная математика и информатика",
+            "name_id": null,
+            "result_id": "9",
+            "organization": "Кибернитика",
+            "organization_id": null
+          }
+        ],
+        "additional": [],
+        "elementary": [],
+        "attestation": []
+      },
+      "favorited": false,
+      "last_name": "test3",
+      "portfolio": [],
+      "schedules": [{ "id": "fullDay", "name": "Полный день" }],
+      "skill_set": ["Исполнительность"],
+      "birth_date": "1999-10-02",
+      "created_at": "2021-02-25T00:36:57+0300",
+      "employment": { "id": "full", "name": "Полная занятость" },
+      "experience": [],
+      "first_name": "null3",
+      "relocation": {
+        "area": [],
+        "type": { "id": "no_relocation", "name": "не готов к переезду" }
+      },
+      "updated_at": "2021-03-24T14:51:33+0300",
+      "certificate": [],
+      "citizenship": [
+        { "id": "113", "url": "https://api.hh.ru/areas/113", "name": "Россия" }
+      ],
+      "employments": [{ "id": "full", "name": "Полная занятость" }],
+      "has_vehicle": null,
+      "middle_name": null,
+      "travel_time": { "id": "any", "name": "Не имеет значения" },
+      "work_ticket": [
+        { "id": "113", "url": "https://api.hh.ru/areas/113", "name": "Россия" }
+      ],
+      "alternate_url": "https://hh.ru/resume/246c7f3dff08be14220039ed1f4f575a625039",
+      "hidden_fields": [],
+      "paid_services": [],
+      "resume_locale": { "id": "RU", "name": "Русский" },
+      "recommendation": [],
+      "specialization": [
+        {
+          "id": "15.93",
+          "name": "Информационные технологии, Интернет, Мультимедиа",
+          "laboring": false,
+          "profarea_id": "15",
+          "profarea_name": "Начало карьеры, студенты"
+        }
+      ],
+      "total_experience": null,
+      "can_view_full_info": true,
+      "driver_license_types": [],
+      "negotiations_history": {
+        "url": "https://api.hh.ru/resumes/246c7f3dff08be14220039ed1f4f575a625039/negotiations_history"
+      },
+      "business_trip_readiness": {
+        "id": "never",
+        "name": "не готов к командировкам"
+      },
+      "rating": 0.4
+    }
+  },
+  {
+    "resume": {
+      "rating": 0.8,
+      "actions": {
+        "download": {
+          "pdf": {
+            "url": "https://api.hh.ru/resumes/09866c49/download/file-name.pdf?type=pdf"
+          },
+          "rtf": {
+            "url": "https://api.hh.ru/resumes/09866c49/download/file-name.rtf?type=rtf"
+          }
+        }
+      },
+      "age": 29,
+      "alternate_url": "https://hh.ru/resume/09866c49",
+      "area": {
+        "id": "1",
+        "name": "Москва",
+        "url": "https://api.hh.ru/areas/1"
+      },
+      "birth_date": "1993-06-28",
+      "business_trip_readiness": {
+        "id": "sometimes",
+        "name": "готов к редким командировкам"
+      },
+      "can_view_full_info": true,
+      "certificate": [],
+      "citizenship": [
+        {
+          "id": "113",
+          "name": "Россия",
+          "url": "https://api.hh.ru/areas/113"
+        }
+      ],
+      "contact": [
+        {
+          "comment": "Звонить после 12",
+          "need_verification": true,
+          "preferred": false,
+          "type": {
+            "id": "cell",
+            "name": "Мобильный телефон"
+          },
+          "value": {
+            "city": "495",
+            "country": "7",
+            "formatted": "+7 (495) 552-73-67",
+            "number": "5527367"
+          },
+          "verified": false
+        },
+        {
+          "preferred": true,
+          "type": {
+            "id": "email",
+            "name": "Эл. почта"
+          },
+          "value": "my-email@example.com"
+        }
+      ],
+      "created_at": "2023-05-25T14:22:06+0300",
+      "download": {
+        "pdf": {
+          "url": "https://api.hh.ru/resumes/09866c49/download/file-name.pdf?type=pdf"
+        },
+        "rtf": {
+          "url": "https://api.hh.ru/resumes/09866c49/download/file-name.rtf?type=rtf"
+        }
+      },
+      "driver_license_types": [
+        {
+          "id": "A"
+        }
+      ],
+      "education": {
+        "additional": [],
+        "attestation": [],
+        "elementary": [],
+        "level": {
+          "id": "master",
+          "name": "Магистр"
+        },
+        "primary": [
+          {
+            "name": "testUniversity",
+            "name_id": null,
+            "organization": "testFaculty",
+            "organization_id": null,
+            "result": "testSpeciality",
+            "result_id": null,
+            "year": 1988
+          }
+        ]
+      },
+      "employment": {
+        "id": "part",
+        "name": "Частичная занятость"
+      },
+      "employments": [
+        {
+          "id": "part",
+          "name": "Частичная занятость"
+        }
+      ],
+      "experience": [
+        {
+          "area": {
+            "id": "1",
+            "name": "Москва",
+            "url": "https://api.hh.ru/areas/1"
+          },
+          "company": "Компания",
+          "company_id": null,
+          "company_url": "http://url.ru",
+          "description": "Руководил отделом",
+          "employer": null,
+          "end": "2012-02-06",
+          "industries": [],
+          "industry": {
+            "id": "1",
+            "name": "Банки/кредиты/инвестиции/лизинг"
+          },
+          "position": "Директор",
+          "start": "2011-01-02"
+        }
+      ],
+      "favorited": false,
+      "first_name": "Иван",
+      "gender": {
+        "id": "male",
+        "name": "Мужской"
+      },
+      "has_vehicle": true,
+      "hidden_fields": [],
+      "id": "09866c49",
+      "language": [
+        {
+          "id": "chv",
+          "level": {
+            "id": "a1",
+            "name": "A1 — Начальный"
+          },
+          "name": "Чувашский"
+        }
+      ],
+      "last_name": "Иванов",
+      "metro": {
+        "id": "6.8",
+        "lat": 55.807794,
+        "line": {
+          "hex_color": "F07E24",
+          "id": "6",
+          "name": "Калужско-Рижская"
+        },
+        "lng": 37.638699,
+        "name": "Алексеевская",
+        "order": 5
+      },
+      "middle_name": null,
+      "negotiations_history": {
+        "url": "https://api.hh.ru/resumes/09866c49/negotiations_history"
+      },
+      "owner": {
+        "comments": {
+          "counters": {
+            "total": 0
+          },
+          "url": "https://api.hh.ru/applicant_comments/54765267"
+        },
+        "id": "54765267"
+      },
+      "paid_services": [],
+      "photo": {
+        "40": "https://hhcdn.ru/photo/00970.png",
+        "100": "https://hhcdn.ru/photo/00971.png",
+        "500": "https://hhcdn.ru/photo/00972.png",
+        "medium": "https://hhcdn.ru/photo/00972.png",
+        "small": "https://hhcdn.ru/photo/00971.png"
+      },
+      "platform": {
+        "id": "headhunter"
+      },
+      "portfolio": [
+        {
+          "description": "Portfolio description",
+          "medium": "https://hhcdn.ru/photo/00976.png",
+          "small": "https://hhcdn.ru/photo/00975.png"
+        }
+      ],
+      "professional_roles": [
+        {
+          "id": "124",
+          "name": "Тестировщик"
+        }
+      ],
+      "recommendation": [
+        {
+          "contact": "",
+          "name": "Ivan",
+          "organization": "HH",
+          "position": "CEO"
+        }
+      ],
+      "relocation": {
+        "area": [
+          {
+            "id": "98",
+            "name": "Ульяновск",
+            "url": "https://api.hh.ru/areas/98"
+          }
+        ],
+        "district": [],
+        "type": {
+          "id": "relocation_possible",
+          "name": "готов к переезду"
+        }
+      },
+      "resume_locale": {
+        "id": "RU",
+        "name": "Русский"
+      },
+      "salary": {
+        "amount": 10000,
+        "currency": "USD"
+      },
+      "schedule": {
+        "id": "flexible",
+        "name": "Гибкий график"
+      },
+      "schedules": [
+        {
+          "id": "flexible",
+          "name": "Гибкий график"
+        }
+      ],
+      "site": [
+        {
+          "type": {
+            "id": "icq",
+            "name": "ICQ"
+          },
+          "url": "123321123"
+        }
+      ],
+      "skill_set": ["Графика", "Дизайн"],
+      "skills": "Руководство большой командой",
+      "title": "API Test Resume",
+      "total_experience": {
+        "months": 14
+      },
+      "travel_time": {
+        "id": "less_than_hour",
+        "name": "Не более часа"
+      },
+      "updated_at": "2023-05-25T14:22:06+0300",
+      "work_ticket": [
+        {
+          "id": "113",
+          "name": "Россия",
+          "url": "https://api.hh.ru/areas/113"
+        }
+      ]
+    }
+  }
+]

@@ -6,7 +6,7 @@
 
     <parent>
         <groupId>com.example</groupId>
-        <artifactId>HW4</artifactId>
+        <artifactId>coursework</artifactId>
         <version>1.0.0</version>
     </parent>
 
@@ -23,7 +23,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.hibernate</groupId>
+            <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>6.4.0.Final</version>
         </dependency>
