@@ -60,6 +60,7 @@ public class ResumeApplication extends Application {
     TextField cityField = new TextField();
     TextField outputFileField = new TextField("output.csv");
     Text getSampleErrorText = new Text();
+    TextField serverUrlField = new TextField("http://localhost:8080");
 
     Button uploadResumesButton = new Button("загрузить список резюме из файла:");
     Button showResumesButton = new Button("показать список резюме");
@@ -77,7 +78,7 @@ public class ResumeApplication extends Application {
             return;
           }
           try {
-            ResumeService.postResumes(resumes);
+            ResumeService.postResumes(serverUrlField.getText(), resumes);
           } catch (Exception e) {
             PopupHandler.showErrorPopup("ошибка при обращении к серверу", e.toString());
           }
@@ -86,7 +87,7 @@ public class ResumeApplication extends Application {
         _e -> {
           ArrayList<Resume> resumes;
           try {
-            resumes = ResumeService.getResumes();
+            resumes = ResumeService.getResumes(serverUrlField.getText());
           } catch (Exception e) {
             PopupHandler.showErrorPopup("ошибка при обращении к серверу", e.toString());
             return;
@@ -97,7 +98,7 @@ public class ResumeApplication extends Application {
     deleteResumeButton.setOnAction(
         _e -> {
           try {
-            ResumeService.deleteResume(deleteResumeField.getText());
+            ResumeService.deleteResume(serverUrlField.getText(), deleteResumeField.getText());
           } catch (Exception e) {
             PopupHandler.showErrorPopup("ошибка при обращении к серверу", e.toString());
           }
@@ -122,6 +123,7 @@ public class ResumeApplication extends Application {
           try {
             resumes =
                 ResumeService.getResumeSample(
+                    serverUrlField.getText(),
                     sampleSizeField.getText(),
                     ratingField.getText(),
                     ageLowerBoundField.getText(),
@@ -188,6 +190,14 @@ public class ResumeApplication extends Application {
     GridPane.setConstraints(outputFileField, 1, 8);
     GridPane.setConstraints(getSampleErrorText, 3, 8);
 
+    Separator separator2 = new Separator();
+    separator2.setPrefHeight(20);
+    GridPane.setConstraints(separator2, 0, 9);
+
+    Text serverUrlText = new Text("адрес сервера для подключения:");
+    GridPane.setConstraints(serverUrlText, 0, 10);
+    GridPane.setConstraints(serverUrlField, 1, 10);
+
     GridPane.setConstraints(aboutButton, 0, 11);
 
     grid.getChildren()
@@ -212,6 +222,9 @@ public class ResumeApplication extends Application {
             getResumeSampleButton,
             outputFileField,
             getSampleErrorText,
+            separator2,
+            serverUrlText,
+            serverUrlField,
             aboutButton);
 
     Scene scene = new Scene(grid);
@@ -223,27 +236,29 @@ public class ResumeApplication extends Application {
 
 /** Класс, отвечающий за коммуникацию с сервером. */
 class ResumeService {
-  private static final String BASE_URL = "http://localhost:8080/api/resumes";
-  private static final String BASE_URL_SAMPLE = "http://localhost:8080/api/resumes_sample";
-
   /**
    * Отправляет резюме из списка на сервер.
    *
+   * @param baseUrl Адрес сервера
    * @param resumes Список резюме для отправления
    */
-  public static void postResumes(ArrayList<Resume> resumes) {
-    new RestTemplate().postForLocation(BASE_URL, resumes);
+  public static void postResumes(String baseUrl, ArrayList<Resume> resumes) {
+    new RestTemplate().postForLocation(baseUrl + "/api/resumes", resumes);
   }
 
   /**
    * Удаляет резюме с сервера.
    *
+   * @param baseUrl Адрес сервера
    * @param id Идентификатор резюме для удаления
    */
-  public static void deleteResume(String id) {
+  public static void deleteResume(String baseUrl, String id) {
     try {
       new RestTemplate()
-          .delete(UriComponentsBuilder.fromHttpUrl(BASE_URL).queryParam("id", id).toUriString());
+          .delete(
+              UriComponentsBuilder.fromHttpUrl(baseUrl + "/api/resumes")
+                  .queryParam("id", id)
+                  .toUriString());
     } catch (Exception e) {
       PopupHandler.showErrorPopup("ошибка при обращении к серверу", e.toString());
     }
@@ -252,18 +267,24 @@ class ResumeService {
   /**
    * Получает с сервера список всех резюме.
    *
+   * @param baseUrl Адрес сервера
    * @return Список всех резюме на сервере
    */
-  public static ArrayList<Resume> getResumes() {
+  public static ArrayList<Resume> getResumes(String baseUrl) {
     ResponseEntity<ArrayList<Resume>> response =
         new RestTemplate()
-            .exchange(BASE_URL, HttpMethod.GET, null, new ParameterizedTypeReference<>() {});
+            .exchange(
+                baseUrl + "/api/resumes",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<>() {});
     return response.getBody();
   }
 
   /**
    * Получает с сервера выборку резюме по параметрам.
    *
+   * @param baseUrl Адрес сервера
    * @param n Количество резюме (должно быть чётным)
    * @param rating Рейтинг. Будет возвращено одинаковое количество резюме с рейтингом меньше и с
    *     рейтингом не меньше параметра
@@ -273,9 +294,9 @@ class ResumeService {
    * @return Список резюме, соответствующих заданным параметрам
    */
   public static ArrayList<Resume> getResumeSample(
-      String n, String rating, String minAge, String maxAge, String city) {
+      String baseUrl, String n, String rating, String minAge, String maxAge, String city) {
     String url =
-        UriComponentsBuilder.fromHttpUrl(BASE_URL_SAMPLE)
+        UriComponentsBuilder.fromHttpUrl(baseUrl + "/api/resumes_sample")
             .queryParam("n", n)
             .queryParam("rating", rating)
             .queryParam("minAge", minAge)
