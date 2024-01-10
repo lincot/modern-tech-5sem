@@ -278,6 +278,7 @@ class TreeGUI extends JFrame {
   private final JTextField treeField;
 
   public TreeGUI(Session session) {
+    setSize(500, 350);
     setTitle("Деревья");
     trees = HibernateTreeDAO.read(session);
 
@@ -377,6 +378,7 @@ class TreesFrame extends JFrame {
   private final JTextArea infoTextArea;
 
   public TreesFrame(ArrayList<Tree> trees) {
+    setSize(1000, 1000);
     setTitle("Информация о деревьях");
     setLayout(new GridLayout(trees.size(), 1));
 

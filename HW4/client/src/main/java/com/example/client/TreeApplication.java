@@ -89,7 +89,7 @@ public class TreeApplication extends Application {
             addTreeButton,
             treeField);
 
-    Scene scene = new Scene(grid);
+    Scene scene = new Scene(grid, 500, 300);
     scene.getStylesheets().add("style.css");
     primaryStage.setScene(scene);
     primaryStage.show();
@@ -168,7 +168,7 @@ class TreesFrame extends Stage {
     }
     layout.getChildren().add(infoTextArea);
 
-    Scene scene = new Scene(layout);
+    Scene scene = new Scene(layout, 400, 400);
     scene.getStylesheets().add("style.css");
     setScene(scene);
   }

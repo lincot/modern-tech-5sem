@@ -227,7 +227,7 @@ public class ResumeApplication extends Application {
             serverUrlField,
             aboutButton);
 
-    Scene scene = new Scene(grid);
+    Scene scene = new Scene(grid, 600, 400);
     scene.getStylesheets().add("style.css");
     primaryStage.setScene(scene);
     primaryStage.show();
@@ -373,7 +373,7 @@ class ResumesFrame extends Stage {
     }
     layout.getChildren().add(info);
 
-    Scene scene = new Scene(layout);
+    Scene scene = new Scene(layout, 500, 300);
     scene.getStylesheets().add("style.css");
     setScene(scene);
   }
