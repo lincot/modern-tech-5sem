@@ -1,11 +1,13 @@
 package org.example;
 
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import org.h2.tools.RunScript;
 
 class Node {
   private final int id;
@@ -188,9 +190,32 @@ class PostgresDatabaseConnector implements DatabaseConnector {
 public class Main {
   public static void main(String[] args) {
     try {
-      Connection connection = new H2DatabaseConnector().getConnection();
+      boolean postgres = false;
+      boolean populate = false;
 
-      // RunScript.execute(connection, new FileReader("init.sql"));
+      for (String arg : args) {
+        if (arg.equals("--postgres")) {
+          postgres = true;
+        } else if (arg.equals("--populate")) {
+          populate = true;
+        }
+      }
+
+      if (postgres) {
+        System.out.println("using PostgreSQL");
+      } else {
+        System.out.println("using H2");
+      }
+
+      Connection connection =
+          postgres
+              ? new PostgresDatabaseConnector().getConnection()
+              : new H2DatabaseConnector().getConnection();
+
+      if (populate) {
+        System.out.println("populating the db");
+        RunScript.execute(connection, new FileReader("init.sql"));
+      }
 
       ArrayList<Tree> trees = TreeReader.readTreesFromSql(connection, "TREES");
 
