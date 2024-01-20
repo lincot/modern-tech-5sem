@@ -19,7 +19,6 @@
         <mapping class="com.example.data.Certificate"/>
         <mapping class="com.example.data.Contact"/>
         <mapping class="com.example.data.ContactType"/>
-        <mapping class="com.example.data.Country"/>
         <mapping class="com.example.data.Currency"/>
         <mapping class="com.example.data.District"/>
         <mapping class="com.example.data.DriverLicenseType"/>

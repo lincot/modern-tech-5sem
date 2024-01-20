@@ -79,7 +79,7 @@ public class Resume {
 
   @ManyToMany(cascade = CascadeType.MERGE)
   @JoinTable(name = "Resume_citizenship")
-  public List<Country> citizenship;
+  public List<Area> citizenship;
 
   @ManyToMany(cascade = CascadeType.MERGE) // merge
   public List<Employment> employments;
@@ -95,7 +95,7 @@ public class Resume {
 
   @ManyToMany(cascade = CascadeType.MERGE) // merge
   @JoinTable(name = "Resume_work_ticket")
-  public List<Country> work_ticket;
+  public List<Area> work_ticket;
 
   public String alternate_url;
 
