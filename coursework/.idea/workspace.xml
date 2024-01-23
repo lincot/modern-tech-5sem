@@ -11,9 +11,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="eea3b949-d952-47c5-9227-8e3c4e2c7cce" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/data/src/main/java/com/example/data/Country.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/src/main/java/com/example/data/Resume.java" beforeDir="false" afterPath="$PROJECT_DIR$/data/src/main/java/com/example/data/Resume.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/resources/hibernate.cfg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/resources/hibernate.cfg.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HW4/server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../HW4/server/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/server/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
