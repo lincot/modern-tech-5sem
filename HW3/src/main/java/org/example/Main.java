@@ -161,6 +161,8 @@ class NodeEntity {
     this.id = id;
     this.parentId = parentId;
   }
+
+  public NodeEntity() {}
 }
 
 class HibernateTreeDAO {
@@ -403,7 +405,13 @@ public class Main {
   public static void main(String[] args) {
     try (SessionFactory factory = new Configuration().configure().buildSessionFactory()) {
       Session session = factory.openSession();
-      HibernateTreeDAO.populate(session);
+
+      for (String arg : args) {
+        if (arg.equals("--populate")) {
+          HibernateTreeDAO.populate(session);
+          break;
+        }
+      }
 
       TreeGUI treeGUI = new TreeGUI(session);
       treeGUI.setVisible(true);

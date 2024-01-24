@@ -36,7 +36,6 @@ class ResumeDAO {
    */
   public static ArrayList<Resume> readSample(
       Session session, int n, double rating, int minAge, int maxAge, String city) {
-    System.out.println(city);
     ArrayList<Resume> result = new ArrayList<>(n);
     String[] ratingOperators = {"<", ">="};
     for (String ratingOperator : ratingOperators) {

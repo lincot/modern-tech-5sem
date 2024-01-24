@@ -20,26 +20,26 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 public class TreeApplication extends Application {
-  private static final String BASE_URL = "http://localhost:8080/api/trees";
+  private static final String BASE_URL = "http://localhost:8080";
   ArrayList<Tree> trees;
-  private final TextField deleteNodeField;
-  private final TextField childNodeField;
-  private final TextField parentNodeField;
-  private final TextField treeField;
+  private final TextField deleteNodeField = new TextField();
+  private final TextField childNodeField = new TextField();
+  private final TextField parentNodeField = new TextField();
+  private final TextField treeField = new TextField();
 
   public static void main(String[] args) {
-    launch();
+    launch(args);
   }
 
-  public TreeApplication() {
-    deleteNodeField = new TextField();
-    childNodeField = new TextField();
-    parentNodeField = new TextField();
-    treeField = new TextField();
-    trees = fetchTrees();
-  }
+  public TreeApplication() {}
 
   public void start(Stage primaryStage) {
+    if (getParameters().getRaw().contains("--populate")) {
+      populate();
+    }
+
+    trees = fetchTrees();
+
     primaryStage.setTitle("Деревья");
 
     Button showTreesButton = new Button("показать список всех деревьев");
@@ -129,7 +129,11 @@ public class TreeApplication extends Application {
   private ArrayList<Tree> fetchTrees() {
     ResponseEntity<ArrayList<NodeWithParentId>> response =
         new RestTemplate()
-            .exchange(BASE_URL, HttpMethod.GET, null, new ParameterizedTypeReference<>() {});
+            .exchange(
+                BASE_URL + "/api/trees",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<>() {});
     ArrayList<NodeWithParentId> nodesWithParentIds = response.getBody();
     assert nodesWithParentIds != null;
     return Tree.fromNodesWithParentIds(nodesWithParentIds);
@@ -147,7 +151,11 @@ public class TreeApplication extends Application {
         res.add(new NodeWithParentId(new Node(node.getId()), parentId));
       }
     }
-    new RestTemplate().postForLocation(BASE_URL, res);
+    new RestTemplate().postForLocation(BASE_URL + "/api/trees", res);
+  }
+
+  private void populate() {
+    new RestTemplate().exchange(BASE_URL + "/api/populate", HttpMethod.GET, null, void.class);
   }
 }
 

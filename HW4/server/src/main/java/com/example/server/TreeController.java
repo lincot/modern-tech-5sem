@@ -97,7 +97,6 @@ public class TreeController {
 
   TreeController() {
     sessionFactory = new Configuration().configure().buildSessionFactory();
-    HibernateTreeDAO.populate(sessionFactory.openSession());
   }
 
   @PostMapping
