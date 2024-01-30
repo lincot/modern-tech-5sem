@@ -68,6 +68,10 @@ class Tree {
             if (i != children.size()) {
               children.set(i, lastChild);
             }
+            node.getParent().getChildren().addAll(node.getChildren());
+            for (Node child : node.getChildren()) {
+              child.setParent(node.getParent());
+            }
             return true;
           }
         }
